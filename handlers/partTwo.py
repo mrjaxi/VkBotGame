@@ -138,7 +138,7 @@ async def part_two_two_handler(message):
             await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_GET_ONE)
             return second_part_one[id_team]
     else:
-        await message.answer("Вы ввели неправильный код NFC")
+        await message.answer("Вы ввели неправильный код")
 
 
 @labeler.message(text="check1")
@@ -441,7 +441,7 @@ async def part_two_five_pass_handler(message):
 
     2. Спросить у экспертов в оранжевой жилетке""")
     await asyncio.sleep(10)
-    await message.answer("Ну что же время для подготовки рассказа пошло,начинайте быстрее готовиться")
+    await message.answer("Ну что же время для подготовки рассказа пошло, начинайте быстрее готовиться. У тебя и твоей команды есть на это всего 5 минут!!!")
     await asyncio.sleep(210)
 
     await message.answer("-Тик-так...")
@@ -518,7 +518,7 @@ async def part_two_five_handler(message):
 
 2. Спросить у экспертов в оранжевой жилетке""")
         await asyncio.sleep(10)
-        await message.answer("Ну что же время для подготовки рассказа пошло,начинайте быстрее готовиться")
+        await message.answer("Ну что же время для подготовки рассказа пошло, начинайте быстрее готовиться. У тебя и твоей команды есть на это всего 5 минут!!!")
         await asyncio.sleep(210)
 
         await message.answer("-Тик-так...")
@@ -668,7 +668,7 @@ async def part_three_one(message):
 
         2. Спросить у экспертов в оранжевой жилетке""")
         await asyncio.sleep(15)
-        await message.answer("Ну что же время для подготовки рассказа пошло,начинайте быстрее готовиться")
+        await message.answer("Ну что же время для подготовки рассказа пошло, начинайте быстрее готовиться. У тебя и твоей команды есть на это всего 5 минут!!!")
         await asyncio.sleep(210)
 
         await message.answer("-Тик-так...")
