@@ -113,7 +113,6 @@ async def city_handler(message):
     if user_id < 10:
         user_id -= 1
     db.set_name_and_team(message.peer_id, message.text, (int(user_id) % 10))
-    print("FIO_STATE: USER_ID -", user_id)
     ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10))
 
     await bot.state_dispenser.set(message.peer_id, WelcomeStates.CITY_STATE)
@@ -594,19 +593,19 @@ async def end_button_handler(message):
 
 @labeler.message(text=["Кто в моей команде?"], state=WelcomeStates.END_STATE_TWO)
 async def my_team_handler(message):
-    user = db.search_user_team(ctx_storage.get(f"{message.peer_id}_team"), ctx_storage.get(f"{message.peer_id}_number"))
-    str = ""
-    count = 0
-    for i in user:
-        count += 1
-        str += f"\n{count}: {i[0]}"
+    # user = db.search_user_team(ctx_storage.get(f"{message.peer_id}_team"), ctx_storage.get(f"{message.peer_id}_number"))
+    # str = ""
+    # count = 0
+    # for i in user:
+    #     count += 1
+    #     str += f"\n{count}: {i[0]}"
+    id_team = ctx_storage.get(f"{message.peer_id}_team")
 
-    await message.answer(f"\nТеперь нужно начинать строительство. Времени у нас мало⏳, поэтому нужно срочно собрать команду и приступать"
-                         f"\n\nВот список: {str}")
-
+    await message.answer(f"Теперь нужно начинать строительство. Времени у нас мало⏳, поэтому нужно срочно собрать команду и приступать")
+    await message.answer(f'''Ты в команде: "{group_position_name[id_team]}"''')
     # сообзения по командам
     await asyncio.sleep(7)
-    await message.answer(first_part_message_one[ctx_storage.get(f"{message.peer_id}_team")])
+    await message.answer(first_part_message_one[id_team])
 
     # Общие сообщения
     await asyncio.sleep(3)
