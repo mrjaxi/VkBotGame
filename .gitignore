@@ -1,1 +1,7 @@
 venv
+.env.test
+.env
+Arduino
+database.db
+database_exel.xlsx
+database_exel_test.xlsx

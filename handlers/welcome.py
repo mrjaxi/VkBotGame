@@ -590,7 +590,6 @@ async def end_button_handler(message):
         keyboard=keyboard)
 
 
-
 @labeler.message(text=["Кто в моей команде?"], state=WelcomeStates.END_STATE_TWO)
 async def my_team_handler(message):
     # user = db.search_user_team(ctx_storage.get(f"{message.peer_id}_team"), ctx_storage.get(f"{message.peer_id}_number"))
@@ -601,7 +600,6 @@ async def my_team_handler(message):
     #     str += f"\n{count}: {i[0]}"
     id_team = ctx_storage.get(f"{message.peer_id}_team")
 
-    await message.answer(f"Теперь нужно начинать строительство. Времени у нас мало⏳, поэтому нужно срочно собрать команду и приступать")
     await message.answer(f'''Ты в команде: "{group_position_name[id_team]}"''')
     # сообзения по командам
     await asyncio.sleep(7)
