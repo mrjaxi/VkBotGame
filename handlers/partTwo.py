@@ -80,7 +80,7 @@ async def part_three_three_handler(message):
         await message.answer("Ой, ошибка. 🤔 Попробуй еще раз 😊")
 
 
-@labeler.message(text="check2")
+@labeler.message(command="check2")
 async def check2(message):
     print(db.get_user_id(message.peer_id))
     user_id = db.get_user_id(message.peer_id)[0][0]
@@ -141,7 +141,7 @@ async def part_two_two_handler(message):
         await message.answer("Вы ввели неправильный код")
 
 
-@labeler.message(text="check1")
+@labeler.message(command="check1")
 async def check1(message):
     user_id = db.get_user_id(message.peer_id)[0][0]
     if bool(user_id):
@@ -321,13 +321,13 @@ async def part_two_four_pass_handler(message):
 
     await message.answer(second_part_five[id_team])
 
-    await asyncio.sleep(25)
+    await asyncio.sleep(5)
     await message.answer("Ты усердно работал ,показывал себя с лучшей стороны,выполнял все намечанные показатели.")
 
     await asyncio.sleep(3)
     await message.answer(second_part_middle_five[id_team])
 
-    await asyncio.sleep(15)
+    await asyncio.sleep(5)
     await message.answer("Тебе наверное хочется все-таки стать главнее? Тогда может быть повысим разряд?")
 
     await asyncio.sleep(3)
@@ -374,13 +374,13 @@ async def part_two_four_handler(message):
 
         await message.answer(second_part_five[id_team])
 
-        await asyncio.sleep(25)
+        await asyncio.sleep(5)
         await message.answer("Ты усердно работал ,показывал себя с лучшей стороны,выполнял все намечанные показатели.")
 
         await asyncio.sleep(3)
         await message.answer(second_part_middle_five[id_team])
 
-        await asyncio.sleep(15)
+        await asyncio.sleep(5)
         await message.answer("Тебе наверное хочется все-таки стать главнее? Тогда может быть повысим разряд?")
 
         await asyncio.sleep(3)
@@ -422,7 +422,7 @@ async def part_two_five_pass_handler(message):
 
 
     У вас есть немного времени, чтобы подготовиться"''')
-    await asyncio.sleep(15)
+    await asyncio.sleep(5)
 
     await message.answer("""Что же должен содержать ваш рассказ?
 
@@ -499,7 +499,7 @@ async def part_two_five_handler(message):
 
 
 У вас есть немного времени, чтобы подготовиться"''')
-        await asyncio.sleep(15)
+        await asyncio.sleep(5)
 
         await message.answer("""Что же должен содержать ваш рассказ?
 
@@ -631,7 +631,7 @@ async def part_three_one(message):
 
 Тренд - это современная тенденция развития и изменения предприятиям, и любому заводу нужно ей следовать, чтобы оставаться востребаванным! А вызовами называются задачи промышленности, решения которых позволяют предприятию достигать поставленных целей и совершенствоваться! 
 ''')
-        await asyncio.sleep(25)
+        await asyncio.sleep(5)
 
         await message.answer("Сегодня именно тебе предстоит следовать трендам и принимать вызовы промышленности! Вместе с командой вы построите вспомогательные макеты, которые ответят поставленным задачам!")
         await asyncio.sleep(5)
@@ -642,10 +642,10 @@ async def part_three_one(message):
         await message.answer(second_part_ten[id_team])
 
         #TODO: Третья часть сделал 164 строчку
-        await asyncio.sleep(25)
+        await asyncio.sleep(5)
         await message.answer(second_part_eleven[id_team])
 
-        await asyncio.sleep(20)
+        await asyncio.sleep(5)
         await message.answer("Ну что? Возникли идеи? Давайте приступим к созданию вашего творческого объекта, подготовьте бумагу, картон, фломастеры, ножницы, скотч и вашу фантазию и воплотите вашу идею в реальность на макете! ✨")
 
         await asyncio.sleep(10)
@@ -658,7 +658,7 @@ async def part_three_one(message):
         2. Хобби и увлечения, кроме учебы
 
         3. Описание того, кем работает твой персонаж""")
-        await asyncio.sleep(15)
+        await asyncio.sleep(5)
 
         await message.answer("""Ого,вот и подсказка ❗️❗️❗️
 
@@ -667,7 +667,7 @@ async def part_three_one(message):
         1. Поискать в предыдущих сообщениях от меня
 
         2. Спросить у экспертов в оранжевой жилетке""")
-        await asyncio.sleep(15)
+        await asyncio.sleep(5)
         await message.answer("Ну что же время для подготовки рассказа пошло, начинайте быстрее готовиться. У тебя и твоей команды есть на это всего 5 минут!!!")
         await asyncio.sleep(210)
 

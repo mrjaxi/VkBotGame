@@ -582,7 +582,7 @@ async def end_button_handler(message):
 async def end_button_handler(message):
     keyboard = (
         Keyboard(inline=True)
-            .add(Text("Кто в моей команде?"), color=KeyboardButtonColor.POSITIVE)
+            .add(Text("В какой я команде?"), color=KeyboardButtonColor.POSITIVE)
     ).get_json()
 
     await message.answer(
@@ -590,7 +590,7 @@ async def end_button_handler(message):
         keyboard=keyboard)
 
 
-@labeler.message(text=["Кто в моей команде?"], state=WelcomeStates.END_STATE_TWO)
+@labeler.message(text=["В какой я команде?"], state=WelcomeStates.END_STATE_TWO)
 async def my_team_handler(message):
     # user = db.search_user_team(ctx_storage.get(f"{message.peer_id}_team"), ctx_storage.get(f"{message.peer_id}_number"))
     # str = ""

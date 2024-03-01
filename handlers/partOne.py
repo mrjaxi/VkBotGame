@@ -263,10 +263,10 @@ async def part_one_pass_one_handler(message):
             peer_id=message.peer_id,
         )
         await message.answer(first_part_special_eight[id_team], attachment=photo1)
-        await asyncio.sleep(15)
+        await asyncio.sleep(5)
     else:
         await message.answer(first_part_special_eight[id_team])
-        await asyncio.sleep(15)
+        await asyncio.sleep(5)
 
     if id_team == 5 or id_team == 8:
         photo2 = await photo_uploader.upload(
@@ -274,17 +274,17 @@ async def part_one_pass_one_handler(message):
             peer_id=message.peer_id,
         )
         await message.answer(first_part_special_nine[id_team], attachment=photo2)
-        await asyncio.sleep(30)
+        await asyncio.sleep(5)
     else:
         await message.answer(first_part_special_nine[id_team])
-        await asyncio.sleep(30)
+        await asyncio.sleep(5)
 
     await message.answer(first_part_special_ten[id_team])
 
-    await asyncio.sleep(30)
+    await asyncio.sleep(5)
     await message.answer(first_part_special_pass_two_answer[id_team])
 
-    await asyncio.sleep(20)
+    await asyncio.sleep(5)
     if id_team == 5 or id_team == 7:
         photo2 = await photo_uploader.upload(
             file_source=f"img/part_one_4_{id_team}_1.png",
@@ -293,7 +293,7 @@ async def part_one_pass_one_handler(message):
         await message.answer(first_part_special_twelve_new[id_team], attachment=photo2)
     else:
         await message.answer(first_part_special_twelve_new[id_team])
-    await asyncio.sleep(20)
+    await asyncio.sleep(5)
     if id_team == 3 or id_team == 5 or id_team == 8:
         photo3 = await photo_uploader.upload(
             file_source=f"img/part_one_5_{id_team}.png",
@@ -303,7 +303,7 @@ async def part_one_pass_one_handler(message):
     else:
         await message.answer(first_part_special_thirteen[id_team])
 
-    await asyncio.sleep(30)
+    await asyncio.sleep(5)
     await message.answer("Сейчас тебе пригодится конспект, который создала твоя команда")
 
     keyboard = await message.answer(first_part_special_fourteen[id_team], keyboard=keyboard_first_part_one[id_team])
@@ -316,11 +316,11 @@ async def part_one_pass_two_handler(message):
     if message.text == "Инженер" or message.text == "инженер":
 
         await message.answer(first_part_special_pass_two_answer[id_team])
-        await asyncio.sleep(2)
+        await asyncio.sleep(5)
 
         # await message.answer(first_part_special_eleven[id_team])
 
-        await asyncio.sleep(60)
+        await asyncio.sleep(5)
         # await asyncio.sleep(3)
         if id_team == 4 or id_team == 6:
             photo2 = await photo_uploader.upload(
@@ -331,7 +331,7 @@ async def part_one_pass_two_handler(message):
         else:
             await message.answer(first_part_special_twelve_new[id_team])
 
-        await asyncio.sleep(30)
+        await asyncio.sleep(5)
         # await asyncio.sleep(3)
         if id_team == 0 or id_team == 2 or id_team == 3 or id_team == 4 or id_team == 6 or id_team == 9:
             photo3 = await photo_uploader.upload(
@@ -342,7 +342,7 @@ async def part_one_pass_two_handler(message):
         else:
             await message.answer(first_part_special_thirteen[id_team])
 
-        await asyncio.sleep(60)
+        await asyncio.sleep(5)
         # await asyncio.sleep(3)
         await bot.state_dispenser.set(message.peer_id, PartOneStates.KEYBOARD_ONE)
 
@@ -391,14 +391,7 @@ async def part_one_pass_five_handler(message):
         await message.answer(first_part_special_nineteen[id_team])
 
     await asyncio.sleep(2)
-    # await message.answer("Ребята, у вас есть возможность творчески проявиться 🧑‍🎨"
-    #                      "\n\nУ вас есть лист-основание, на котором остались пустые пространства. Заполните их, используя вашу фантазию, фломастеры и полученную теорию по вашей установке 🤩")
-    #
-    # photo1 = await photo_uploader.upload(
-    #     file_source=f"img/shema_korobok.png",
-    #     peer_id=message.peer_id,
-    # )
-    # await asyncio.sleep(5)
+
     await message.answer("Ну что ребята, пришло время завершать строительство ")
     await asyncio.sleep(3)
     await message.answer("Вы помните, что нефтеперерабатывающий завод - это единый механизм\n\n"
@@ -445,7 +438,7 @@ async def part_one_pass_six_handler(message):
 
 
 У вас есть немного времени, чтобы подготовиться""")
-        await asyncio.sleep(15)
+        await asyncio.sleep(5)
         # id_team = ctx_storage.get(f"{message.peer_id}_team")
         # await message.answer(first_part_before_password[id_team])
         # # await asyncio.sleep(300)
@@ -466,7 +459,7 @@ async def part_one_pass_six_handler(message):
 1. Поискать в предыдущих сообщениях от меня
 
 2. Спросить у экспертов в оранжевой жилетке""")
-        await asyncio.sleep(15)
+        await asyncio.sleep(5)
         await message.answer("Ну что же время для подготовки рассказа пошло,начинайте быстрее готовиться. У тебя и твоей команды есть на это всего 5 минут!!!")
         await asyncio.sleep(210)
 
