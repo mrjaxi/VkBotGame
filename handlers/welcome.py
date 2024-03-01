@@ -24,8 +24,13 @@ async def dell_user(message):
 
 @labeler.message(command="part")
 async def dell_user(message):
-    db.del_user(message.peer_id)
-
+    nowdate = datetime.now()
+    newdate = nowdate.strftime("%d/%m/%Y")
+    user_id = db.get_user_id(message.peer_id)[0][0]
+    db.add_user_test_one(message.peer_id, newdate, message.text)
+    db.set_name_and_team(message.peer_id, message.text, (int(user_id) % 10))
+    ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10))
+    ctx_storage.set(f"{message.peer_id}_number", 0)
     await bot.state_dispenser.set(message.peer_id, PartTwoStates.PASSWORD_START_TWO_STATES)
     await message.answer("Для продолжения введите пароль")
 
