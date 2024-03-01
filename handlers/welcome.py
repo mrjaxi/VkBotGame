@@ -9,7 +9,7 @@ from config import labeler, photo_uploader, audio_uploader
 from data.group import group_position_name
 from data.partOneMessage import first_part_message_one
 from database.db import Database
-from states.mystates import WelcomeStates, PartOneStates, TestOneStates, PartTwoStates
+from states.mystates import WelcomeStates, PartOneStates, TestOneStates, PartTwoStates, PartThreeStates
 
 ctx_storage = CtxStorage()
 db = Database('database.db')
@@ -117,11 +117,9 @@ async def city_handler(message):
     nowdate = datetime.now()
     newdate = nowdate.strftime("%d/%m/%Y")
     # ctx_storage.set("fio", "Рахметов Вадим Ильшатович")
-    user_id = db.get_user_id(message.peer_id)[0][0]
+    user_id = db.get_user_id(message.peer_id)[0][0] - 1
     db.add_user_test_one(message.peer_id, newdate, message.text)
     # вставляем юзера в базу данных и его команду
-    if user_id < 10:
-        user_id -= 1
     db.set_name_and_team(message.peer_id, message.text, (int(user_id) % 10))
     ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10))
 
