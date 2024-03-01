@@ -9,7 +9,7 @@ from config import labeler, photo_uploader, audio_uploader
 from data.group import group_position_name
 from data.partOneMessage import first_part_message_one
 from database.db import Database
-from states.mystates import WelcomeStates, PartOneStates, TestOneStates
+from states.mystates import WelcomeStates, PartOneStates, TestOneStates, PartTwoStates
 
 ctx_storage = CtxStorage()
 db = Database('database.db')
@@ -20,6 +20,14 @@ async def dell_user(message):
     db.del_user(message.peer_id)
 
     await message.answer("Данные о вас были удалены!")
+
+
+@labeler.message(command="part")
+async def dell_user(message):
+    db.del_user(message.peer_id)
+
+    await bot.state_dispenser.set(message.peer_id, PartTwoStates.PASSWORD_START_TWO_STATES)
+    await message.answer("Для продолжения введите пароль")
 
 
 @labeler.message(text=['Начать', 'начать', 'Начать игру! 🌟'])

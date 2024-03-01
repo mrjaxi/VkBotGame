@@ -461,14 +461,14 @@ async def part_one_pass_six_handler(message):
 2. Спросить у экспертов в оранжевой жилетке""")
         await asyncio.sleep(5)
         await message.answer("Ну что же время для подготовки рассказа пошло,начинайте быстрее готовиться. У тебя и твоей команды есть на это всего 5 минут!!!")
-        await asyncio.sleep(210)
+        await asyncio.sleep(255)
 
         await message.answer("-Тик-так...")
-        await asyncio.sleep(30)
+        await asyncio.sleep(15)
         await message.answer("-Тик-так...")
-        await asyncio.sleep(30)
+        await asyncio.sleep(15)
         await message.answer("-Тик-таааакк❗️❗️❗️")
-        await asyncio.sleep(30)
+        await asyncio.sleep(15)
         await message.answer("Когда все команды выступят ,тебе нужно будет ввести пароль, который ты узнаешь от организатора")
 
         await bot.state_dispenser.set(message.peer_id, PartTwoStates.PASSWORD_START_TWO_STATES)

@@ -442,14 +442,14 @@ async def part_two_five_pass_handler(message):
     2. Спросить у экспертов в оранжевой жилетке""")
     await asyncio.sleep(10)
     await message.answer("Ну что же время для подготовки рассказа пошло, начинайте быстрее готовиться. У тебя и твоей команды есть на это всего 5 минут!!!")
-    await asyncio.sleep(210)
+    await asyncio.sleep(255)
 
     await message.answer("-Тик-так...")
-    await asyncio.sleep(30)
+    await asyncio.sleep(15)
     await message.answer("-Тик-так...")
-    await asyncio.sleep(30)
+    await asyncio.sleep(15)
     await message.answer("-Тик-таааакк❗️❗️❗️")
-    await asyncio.sleep(30)
+    await asyncio.sleep(15)
     # TODO: Жду третьей части
     return "Когда все команды выступят, тебе нужно будет ввести пароль, который ты узнаешь от организатора"
 
@@ -519,14 +519,14 @@ async def part_two_five_handler(message):
 2. Спросить у экспертов в оранжевой жилетке""")
         await asyncio.sleep(10)
         await message.answer("Ну что же время для подготовки рассказа пошло, начинайте быстрее готовиться. У тебя и твоей команды есть на это всего 5 минут!!!")
-        await asyncio.sleep(210)
+        await asyncio.sleep(255)
 
         await message.answer("-Тик-так...")
-        await asyncio.sleep(30)
+        await asyncio.sleep(15)
         await message.answer("-Тик-так...")
-        await asyncio.sleep(30)
+        await asyncio.sleep(15)
         await message.answer("-Тик-таааакк❗️❗️❗️")
-        await asyncio.sleep(30)
+        await asyncio.sleep(15)
         # TODO: Жду третьей части
         return "Когда все команды выступят, тебе нужно будет ввести пароль, который ты узнаешь от организатора"
 
@@ -669,14 +669,14 @@ async def part_three_one(message):
         2. Спросить у экспертов в оранжевой жилетке""")
         await asyncio.sleep(5)
         await message.answer("Ну что же время для подготовки рассказа пошло, начинайте быстрее готовиться. У тебя и твоей команды есть на это всего 5 минут!!!")
-        await asyncio.sleep(210)
+        await asyncio.sleep(255)
 
         await message.answer("-Тик-так...")
-        await asyncio.sleep(30)
+        await asyncio.sleep(15)
         await message.answer("-Тик-так...")
-        await asyncio.sleep(30)
+        await asyncio.sleep(15)
         await message.answer("-Тик-таааакк❗️❗️❗️")
-        await asyncio.sleep(30)
+        await asyncio.sleep(15)
         await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS_ONE)
 
         return "Когда все команды выступят ,тебе нужно будет ввести пароль, который ты узнаешь от организатора"
