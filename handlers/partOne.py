@@ -310,44 +310,44 @@ async def part_one_pass_one_handler(message):
     return keyboard
 
 
-@labeler.message(state=PartOneStates.PASS_TWO)
-async def part_one_pass_two_handler(message):
-    id_team = ctx_storage.get(f"{message.peer_id}_team")
-    if message.text == "Инженер" or message.text == "инженер":
-
-        await message.answer(first_part_special_pass_two_answer[id_team])
-        await asyncio.sleep(5)
-
-        # await message.answer(first_part_special_eleven[id_team])
-
-        await asyncio.sleep(5)
-        # await asyncio.sleep(3)
-        if id_team == 4 or id_team == 6:
-            photo2 = await photo_uploader.upload(
-                file_source=f"img/part_one_4_{id_team}_1.png",
-                peer_id=message.peer_id,
-            )
-            await message.answer(first_part_special_twelve_new[id_team], attachment=photo2)
-        else:
-            await message.answer(first_part_special_twelve_new[id_team])
-
-        await asyncio.sleep(5)
-        # await asyncio.sleep(3)
-        if id_team == 0 or id_team == 2 or id_team == 3 or id_team == 4 or id_team == 6 or id_team == 9:
-            photo3 = await photo_uploader.upload(
-                file_source=f"img/part_one_5_{id_team}.png",
-                peer_id=message.peer_id,
-            )
-            await message.answer(first_part_special_thirteen[id_team], attachment=photo3)
-        else:
-            await message.answer(first_part_special_thirteen[id_team])
-
-        await asyncio.sleep(5)
-        # await asyncio.sleep(3)
-        await bot.state_dispenser.set(message.peer_id, PartOneStates.KEYBOARD_ONE)
-
-    else:
-        await message.answer("Ой, ошибка. 🤔 Попробуй еще раз 😊")
+# @labeler.message(state=PartOneStates.PASS_TWO)
+# async def part_one_pass_two_handler(message):
+#     id_team = ctx_storage.get(f"{message.peer_id}_team")
+#     if message.text == "Инженер" or message.text == "инженер":
+#
+#         await message.answer(first_part_special_pass_two_answer[id_team])
+#         await asyncio.sleep(5)
+#
+#         # await message.answer(first_part_special_eleven[id_team])
+#
+#         await asyncio.sleep(5)
+#         # await asyncio.sleep(3)
+#         if id_team == 4 or id_team == 6:
+#             photo2 = await photo_uploader.upload(
+#                 file_source=f"img/part_one_4_{id_team}_1.png",
+#                 peer_id=message.peer_id,
+#             )
+#             await message.answer(first_part_special_twelve_new[id_team], attachment=photo2)
+#         else:
+#             await message.answer(first_part_special_twelve_new[id_team])
+#
+#         await asyncio.sleep(5)
+#         # await asyncio.sleep(3)
+#         if id_team == 0 or id_team == 2 or id_team == 3 or id_team == 4 or id_team == 6 or id_team == 9:
+#             photo3 = await photo_uploader.upload(
+#                 file_source=f"img/part_one_5_{id_team}.png",
+#                 peer_id=message.peer_id,
+#             )
+#             await message.answer(first_part_special_thirteen[id_team], attachment=photo3)
+#         else:
+#             await message.answer(first_part_special_thirteen[id_team])
+#
+#         await asyncio.sleep(5)
+#         # await asyncio.sleep(3)
+#         await bot.state_dispenser.set(message.peer_id, PartOneStates.KEYBOARD_ONE)
+#
+#     else:
+#         await message.answer("Ой, ошибка. 🤔 Попробуй еще раз 😊")
 
 
 @labeler.message(state=PartOneStates.KEYBOARD_ONE)
