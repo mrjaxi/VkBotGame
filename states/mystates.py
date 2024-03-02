@@ -32,6 +32,7 @@ class PartOneStates(BaseStateGroup):
     ANSWER_FOUR_STATES = "answer_four"
     ANSWER_FIVE_STATES = "answer_five"
     PASS_ONE = "pass_one"
+    PASS_TWO = "pass_two"
     KEYBOARD_ONE = "keyboard_one"
     KEYBOARD_TWO = "keyboard_two"
     KEYBOARD_THREE = "keyboard_three"
