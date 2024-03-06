@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "comport-scanner"
+version = "0.1.0"
+description = ""
+authors = ["sams3arson <kirill.gemb@gmail.com>"]
+readme = "README.md"
+packages = [{include = "comport_scanner"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pyserial = "^3.5"
+aiohttp = "^3.9.3"
+
+
+[tool.poetry.group.dev.dependencies]
+types-pyserial = "^3.5.0.20240205"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

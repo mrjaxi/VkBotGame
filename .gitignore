@@ -1,5 +1,4 @@
 venv
-.env.test
 .env
 Arduino
 database.db
