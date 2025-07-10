@@ -1,11 +1,11 @@
 <?php
 $servername = "localhost";
 // Здесь указываем название БД
-$dbname = "u1946154_default";
+$dbname = "vkbotgame";
 // Указываем имя пользователя
-$username = "u1946154_default";
+$username = "jordan";
 // Указываем пароль
-$password = "bp98Nszw7pPA04Y7";
+$password = "jordanpie";
 
 
  echo "Вы зашли";
