@@ -4,3 +4,4 @@ aiomysql~=0.1.1
 PyMySQL~=1.0.2
 environs~=9.5.0
 pandas~=1.4.4
+marshmallow>=3.13,<4.0

@@ -51,6 +51,7 @@ class PartTwoStates(BaseStateGroup):
     FEEDBACK = "feedback"
     UPDATEFEEDBACK = "updatefeedback"
     NEXTGAME = "nextgame"
+    ENDGAMENEXT = "endgamenext"
 
 class PartThreeStates(BaseStateGroup):
     PASS = "pass"

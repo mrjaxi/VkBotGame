@@ -46,7 +46,7 @@ async def start_handler(message):
 @labeler.message(state=WelcomeStates.PASSWORD_START_STATE)
 async def password_handler(message):
     # password_for_start_game = "3333"
-    if (message.text == "0102032024") or (message.text == "0103032024"):
+    if (message.text == "0111072025") or (message.text == "0112072025"):
         number = 0
         ctx_storage.set(f"{message.peer_id}_number", 0)
         # if message.text == "8888":
@@ -83,7 +83,7 @@ async def password_handler(message):
 
         try:
             audio = await audio_uploader.upload(
-                file_source="voice/hello.mp3",
+                file_source="voice/1-часть.mp3",
                 peer_id=message.peer_id,
                 title='название'
             )
@@ -559,7 +559,7 @@ async def end_button_handler(message):
     await message.answer("Ты же знаешь, что завод огромный")
     # тут будет картинка
     photo1 = await photo_uploader.upload(
-        file_source=f"img/Завод.jpg",
+        file_source=f"img/Завод.webp",
         peer_id=message.peer_id,
     )
     await message.answer("Посмотри, как красиво он выглядит", attachment=photo1)

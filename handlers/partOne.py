@@ -1,4 +1,5 @@
 import asyncio
+import time
 
 from vkbottle import CtxStorage
 from vkbottle import Keyboard, KeyboardButtonColor, \
@@ -11,10 +12,13 @@ from data.partOneMessage import first_part_special_one, first_part_special_two, 
     first_part_special_four, first_part_special_five, first_part_special_six, first_part_special_seven, \
     first_part_special_eight, first_part_special_nine, first_part_special_ten, first_part_special_eleven, \
     first_part_special_twelve, first_part_special_thirteen, first_part_special_fourteen, first_part_special_fifteen, \
-    first_part_special_sixteen,first_part_special_eight_addon, first_part_special_seventeen, first_part_special_eighteen, first_part_special_nineteen, \
-    first_part_before_password, first_part_special_two_addon, first_part_special_three_new, first_part_special_pass_new, first_part_special_four_new, \
+    first_part_special_sixteen, first_part_special_eight_addon, first_part_special_seventeen, \
+    first_part_special_eighteen, first_part_special_nineteen, \
+    first_part_before_password, first_part_special_two_addon, first_part_special_three_new, first_part_special_pass_new, \
+    first_part_special_four_new, \
     first_part_special_six_new, first_part_special_seven_new, first_part_special_twelve_new, \
-    first_part_special_pass_new_answer, first_part_special_pass_two_answer
+    first_part_special_pass_new_answer, first_part_special_pass_two_answer, first_part_special_two_addon_addon, \
+    first_part_special_two_addon_addon_addon, first_part_special_nine_addon
 from database.db import Database
 from states.mystates import WelcomeStates, PartOneStates, PartTwoStates
 
@@ -24,8 +28,9 @@ db = Database('database.db')
 
 @labeler.message(text=["Я подошел к столу 😊"], state=PartOneStates.START_STATE)
 async def part_one_one_handler(message):
-    await message.answer("На вашем столе есть чемоданчик для инструментов. Но пока он закрыт 🤔"
-                         "\t\tДавай же откроем его!")
+    await message.answer("""На вашем столе есть чемоданчик для инструментов. Но пока он закрыт 🤔
+
+Давай же откроем его!""")
     await message.answer("Скорее читайте инструкцию. Я приготовил для вас кое-что интересное 🤩")
     await bot.state_dispenser.set(message.peer_id, PartOneStates.PASSWORD_GAME_STATES)
     return "В инструкции ты найдешь кодовое слово. Напиши его"
@@ -45,9 +50,11 @@ async def part_one_two_handler(message):
 
 - основание макета  ⬜
 - акриловые конструкции и наклейки
-- ножницы ✂️
-- ручки 🖊️
-- журналы открытий""")
+- журналы открытий
+- книжки достижений
+
+
+""")
 
         await message.answer("Давай начнем изучать процессы нефтепереработки!"
                              "\n\nКаждому из вас я оставил «Журнал открытий», чтобы ты мог изучить основные понятия из нефтепереработки"
@@ -202,22 +209,99 @@ async def part_one_seven_handler(message):
     await message.answer(first_part_special_two[id_team], attachment=photo)
     await asyncio.sleep(3)
 
-    if id_team == 9:
+    if id_team == 4:
         photo_9_1 = await photo_uploader.upload(
-            file_source=f"img/part_one_1_9_2.png",
+            file_source=f"img/part_one_1_{id_team}_2.png",
             peer_id=message.peer_id,
         )
         await message.answer(attachment=photo_9_1)
         await asyncio.sleep(3)
-    if id_team == 1 or id_team == 2 or id_team == 7 or id_team == 9:
+    elif id_team == 8:
+        photo_1 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_1.png",
+            peer_id=message.peer_id,
+        )
+        photo_2 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_2.png",
+            peer_id=message.peer_id,
+        )
+        photo_3 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_3.png",
+            peer_id=message.peer_id,
+        )
+        photo_4 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_4.png",
+            peer_id=message.peer_id,
+        )
+        photo_5 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_5.png",
+            peer_id=message.peer_id,
+        )
+        await message.answer(attachment=photo_1)
+        await asyncio.sleep(3)
+        await message.answer(first_part_special_two_addon[id_team], attachment=photo_3)
+        await message.answer(attachment=photo_2)
+        await asyncio.sleep(3)
+        await message.answer(first_part_special_two_addon_addon[id_team], attachment=photo_4)
+        await asyncio.sleep(3)
+        await message.answer(first_part_special_two_addon_addon_addon[id_team], attachment=photo_5)
+    elif id_team == 7:
+        photo_1 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_1.png",
+            peer_id=message.peer_id,
+        )
+        photo_2 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_2.png",
+            peer_id=message.peer_id,
+        )
+        photo_3 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_3.png",
+            peer_id=message.peer_id,
+        )
+        photo_4 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_4.png",
+            peer_id=message.peer_id,
+        )
+
+        await message.answer(first_part_special_two_addon[id_team], attachment=photo_1)
+        await asyncio.sleep(1)
+        await message.answer(first_part_special_two_addon_addon[id_team], attachment=photo_2)
+        await message.answer(attachment=photo_3)
+        await asyncio.sleep(1)
+        await message.answer(first_part_special_two_addon_addon_addon[id_team], attachment=photo_4)
+        await asyncio.sleep(3)
+    elif id_team == 6:
+        photo_1 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_1.png",
+            peer_id=message.peer_id,
+        )
+        photo_2 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_2.png",
+            peer_id=message.peer_id,
+        )
+        await message.answer(first_part_special_two_addon[id_team], attachment=photo_1)
+        await asyncio.sleep(1)
+        await message.answer(first_part_special_two_addon_addon[id_team], attachment=photo_2)
+        await asyncio.sleep(3)
+    elif id_team == 1 or id_team == 2 or id_team == 5:
         photo_1 = await photo_uploader.upload(
             file_source=f"img/part_one_1_{id_team}_1.png",
             peer_id=message.peer_id,
         )
         await message.answer(first_part_special_two_addon[id_team], attachment=photo_1)
         await asyncio.sleep(3)
-    elif id_team == 6:
-        await message.answer(first_part_special_two_addon[id_team])
+    elif id_team == 3 or id_team == 9:
+        photo_1 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_1.png",
+            peer_id=message.peer_id,
+        )
+        photo_2 = await photo_uploader.upload(
+            file_source=f"img/part_one_1_{id_team}_2.png",
+            peer_id=message.peer_id,
+        )
+        await message.answer(first_part_special_two_addon[id_team], attachment=photo_1)
+        await asyncio.sleep(1)
+        await message.answer(attachment=photo_2)
         await asyncio.sleep(3)
 
     await message.answer(first_part_special_three_new[id_team])
@@ -268,12 +352,38 @@ async def part_one_pass_one_handler(message):
         await message.answer(first_part_special_eight[id_team])
         await asyncio.sleep(5)
 
-    if id_team == 5 or id_team == 8:
+    if id_team == 8:
         photo2 = await photo_uploader.upload(
             file_source=f"img/part_one_4_{id_team}.png",
             peer_id=message.peer_id,
         )
         await message.answer(first_part_special_nine[id_team], attachment=photo2)
+        await asyncio.sleep(5)
+    elif id_team == 5:
+        photo1 = await photo_uploader.upload(
+            file_source=f"img/part_one_4_{id_team}.png",
+            peer_id=message.peer_id,
+        )
+        photo3 = await photo_uploader.upload(
+            file_source=f"img/part_one_4_{id_team}_1.png",
+            peer_id=message.peer_id,
+        )
+        await message.answer(first_part_special_nine[id_team], attachment=photo1)
+        await asyncio.sleep(3)
+        await message.answer(first_part_special_nine_addon[id_team], attachment=photo3)
+        await asyncio.sleep(5)
+    elif id_team == 7:
+        photo1 = await photo_uploader.upload(
+            file_source=f"img/part_one_4_{id_team}.png",
+            peer_id=message.peer_id,
+        )
+        photo3 = await photo_uploader.upload(
+            file_source=f"img/part_one_4_{id_team}_1.png",
+            peer_id=message.peer_id,
+        )
+        await message.answer(first_part_special_nine[id_team], attachment=photo1)
+        await asyncio.sleep(0.5)
+        await message.answer(first_part_special_nine_addon[id_team], attachment=photo3)
         await asyncio.sleep(5)
     else:
         await message.answer(first_part_special_nine[id_team])

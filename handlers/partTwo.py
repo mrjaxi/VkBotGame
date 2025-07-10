@@ -4,7 +4,7 @@ from vkbottle import CtxStorage
 from vkbottle import Keyboard, KeyboardButtonColor, \
     Text
 import bot
-from config import labeler, photo_uploader, audio_uploader
+from config import labeler, photo_uploader, audio_uploader, excel_uploader
 from data.group import team_way
 from data.partTwoMessage import second_part_one, second_part_rooms, second_part_ten, second_part_middle_two, \
     second_part_three, second_part_four, second_part_five, \
@@ -315,7 +315,6 @@ async def part_two_four_pass_handler(message):
     ctx_storage.set(f"{message.peer_id}_position_check", 1)
     id_team = ctx_storage.get(f"{message.peer_id}_team")
     await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_GET_THREE)
-    await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_GET_THREE)
     await message.answer(second_part_four[id_team])
     await asyncio.sleep(3)
 
@@ -621,6 +620,16 @@ async def part_three_one(message):
 
 А сейчас будет еще одна из интересных частей, и это "Вызовы"
 ''', attachment=photo1)
+        await asyncio.sleep(2)
+        try:
+            audio = await audio_uploader.upload(
+                file_source="voice/3-часть.mp3",
+                peer_id=message.peer_id,
+                title='название'
+            )
+            await message.answer(attachment=audio)
+        except Exception:
+            await message("Ошибка аудио:(")
         await asyncio.sleep(5)
 
         await message.answer('''Ты уже создал завод и даже смог подняться по карьерной лестнице. Завод, как и любое большое предприятие, требует постоянной модернизации, чтобы идти в ногу с современными технологиями!
@@ -937,5 +946,37 @@ async def part_two_seven_pass_handler(message):
 @labeler.message(text=["Да", "Нет"], state=PartTwoStates.NEXTGAME)
 async def part_two_eight_pass_handler(message):
     db.set_nextgame(message.peer_id, message.text)
+    photo_1 = await photo_uploader.upload(
+        file_source=f"img/endgame.jpg",
+        peer_id=message.peer_id,
+    )
+    document_pdf = await excel_uploader.upload(
+        file_source=f"img/Листовка_Базовая_кафедра_ОмГТУ_2024_2025_2.pdf",
+        peer_id=message.peer_id,
+        title='Листовка_Базовая_кафедра_ОмГТУ_2024_2025_2.pdf'
+    )
+    await message.answer("Спасибо за ответы и участие в игре «Производство будущего» 🤗", attachment=photo_1)
+    await asyncio.sleep(2)
+    await message.answer("А теперь самая полезная информация, которую мы дарим тебе по результатам прохождения игры")
+    await asyncio.sleep(2)
+    await message.answer('Наше общение не прекращаетя! Если ты в этом году окончил школу, то у тебя есть возможность стать другом "Газпромнеть-ОНПЗ"')
+    await asyncio.sleep(2)
+    await message.answer('Это можно сделать, поступив на базовую кафедру "Газпром нефть" в ОмГТУ')
+    await asyncio.sleep(2)
+    await message.answer("И ты еще успеваешь это сделать, даже если уже подал документы в вуз!")
+    await asyncio.sleep(2)
+    await message.answer('''Для этого нужно сделать три действия:
+
+1. Написать в ТГ или WhatsApp куратору базовой кафедры Анне Анатольевне по номеру 89136320877
+2. Заполнить заявку, которую Анна Анатольевна тебе направит
+3. Пройти проверку и стать студентом базовой кафедры "Газпром нефти" в ОмГТУ
+''')
+    await asyncio.sleep(2)
+    await message.answer('''Сделать это можно только до 18 июля! Но лучше сегодня, пока еще есть такая возможность''')
+    await asyncio.sleep(2)
+    await message.answer('''А пока лови листовку, в которой про это подробнее написано ''', attachment=document_pdf)
+    await asyncio.sleep(2)
+    await message.answer('''Ну все, теперь ты знаешь все, что нужно! До встречи!''')
+
     await bot.state_dispenser.delete(message.peer_id)
-    await message.answer("Спасибо за ответы и участие в игре «Производство будущего» 🤗")
+

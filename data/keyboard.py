@@ -131,13 +131,13 @@ keyboard_first_part_two = {
     ).get_json(),
     1: (
         Keyboard(inline=True)
-        .add(Text("инженер-эколог"), color=KeyboardButtonColor.POSITIVE)
+        .add(Text("оператор технологической установки"), color=KeyboardButtonColor.POSITIVE)
         .row()
-        .add(Text("инженер-технолог"), color=KeyboardButtonColor.POSITIVE)
+        .add(Text("оператор компрессорной установки"), color=KeyboardButtonColor.POSITIVE)
         .row()
-        .add(Text("специалист лаборатории"), color=KeyboardButtonColor.POSITIVE)
+        .add(Text("лаборант"), color=KeyboardButtonColor.POSITIVE)
         .row()
-        .add(Text("инженер-проектировщик"), color=KeyboardButtonColor.POSITIVE)
+        .add(Text("директор завода"), color=KeyboardButtonColor.POSITIVE)
     ).get_json(),
     2: (
         Keyboard(inline=True)
@@ -223,7 +223,7 @@ keyboard_first_part_two = {
 
 keyboard_first_part_two_answer = {
     0: "для знакомства с предприятием",
-    1: "инженер-технолог",
+    1: "оператор технологической установки",
     2: "в корпоративном университете",
     3: "атмосферного блока перегонки нефти",
     4: "пентан",
@@ -240,23 +240,23 @@ keyboard_first_part_two_answer = {
 keyboard_first_part_three = {
     0: (
         Keyboard(inline=True)
-        .add(Text("экскурсии на предприятия"), color=KeyboardButtonColor.POSITIVE)
+        .add(Text("мероприятия от предприятий"), color=KeyboardButtonColor.POSITIVE)
         .row()
         .add(Text("участие в профориентационных проектах"), color=KeyboardButtonColor.POSITIVE)
         .row()
         .add(Text("все ответы верны"), color=KeyboardButtonColor.POSITIVE)
         .row()
-        .add(Text("обучение в профильном классе"), color=KeyboardButtonColor.POSITIVE)
+        .add(Text("игра"), color=KeyboardButtonColor.POSITIVE)
     ).get_json(),
     1: (
         Keyboard(inline=True)
-        .add(Text("инженер-механик"), color=KeyboardButtonColor.POSITIVE)
+        .add(Text("оператор технологической установки"), color=KeyboardButtonColor.POSITIVE)
         .row()
-        .add(Text("инженер-технолог"), color=KeyboardButtonColor.POSITIVE)
+        .add(Text("оператор компрессорной установки"), color=KeyboardButtonColor.POSITIVE)
         .row()
-        .add(Text("специалист лаборатории"), color=KeyboardButtonColor.POSITIVE)
+        .add(Text("лаборант"), color=KeyboardButtonColor.POSITIVE)
         .row()
-        .add(Text("инженер-эколог"), color=KeyboardButtonColor.POSITIVE)
+        .add(Text("директор завода"), color=KeyboardButtonColor.POSITIVE)
     ).get_json(),
     2: (
         Keyboard(inline=True)
@@ -341,8 +341,8 @@ keyboard_first_part_three = {
 }
 
 keyboard_first_part_three_answer = {
-    0: "все ответы верны",
-    1: "специалист лаборатории",
+    0: "игра",
+    1: "лаборант",
     2: "все ответы верны",
     3: "снизить температуру кипения компонентов",
     4: "для проведения процесса ректификации",
