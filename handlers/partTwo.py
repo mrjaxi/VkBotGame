@@ -1,6 +1,6 @@
 import asyncio
 
-from vkbottle import CtxStorage
+from vkbottle import CtxStorage, OpenLink
 from vkbottle import Keyboard, KeyboardButtonColor, \
     Text
 import bot
@@ -11,7 +11,7 @@ from data.partTwoMessage import second_part_one, second_part_rooms, second_part_
     second_part_six, second_part_seven, second_part_middle_five, second_part_eight, second_part_nine, second_part_eleven
 from database.aiodb import user_info
 from database.settings import settingsAio
-
+from urllib.parse import quote
 from database.db import Database
 from states.mystates import PartTwoStates, TestTwoStates, PartThreeStates
 
@@ -85,9 +85,19 @@ async def check2(message):
     print(db.get_user_id(message.peer_id))
     user_id = db.get_user_id(message.peer_id)[0][0]
     if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10) + 5)
+        ctx_storage.set(f"{message.peer_id}_team", 8)
 
     await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_ID)
+    return f"Продолжайте {ctx_storage.get(f'{message.peer_id}_team')}"
+
+@labeler.message(command="check3")
+async def check2(message):
+    print(db.get_user_id(message.peer_id))
+    user_id = db.get_user_id(message.peer_id)[0][0]
+    if bool(user_id):
+        ctx_storage.set(f"{message.peer_id}_team", 8)
+
+    await bot.state_dispenser.set(message.peer_id, PartTwoStates.UPDATEFEEDBACK)
     return f"Продолжайте {ctx_storage.get(f'{message.peer_id}_team')}"
 
 
@@ -116,14 +126,17 @@ async def part_two_two_handler(message):
 Жди сообщений от меня''')
         check = False
         my_position = team_way[id_team].split('-')[0]
-        print(my_position)
+        print("MY POSITION DATA:", my_position)
         while not check:
             if ctx_storage.get(f"{message.peer_id}_position_check") == 1:
                 break
-
+            print("settingsAioMass: ", bool(settingsAio.mass), settingsAio.mass)
             if bool(settingsAio.mass):
                 for mas in settingsAio.mass:
-                    if mas[1] == message.text and mas[2] == my_position:
+                    print("MASSS", mas[1], mas[2])
+                    print("MASSS CHECK: ", mas[1] == message.text and mas[2] == my_position)
+                    print("MASSS CHECK1: ", message.text, my_position)
+                    if str(mas[1]) == message.text and str(mas[2]) == my_position:
                         check = True
                         break
             if check:
@@ -133,7 +146,7 @@ async def part_two_two_handler(message):
                 break
 
             await asyncio.sleep(2)
-
+            print("CHECK", check)
         if check:
             await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_GET_ONE)
             return second_part_one[id_team]
@@ -203,7 +216,7 @@ async def part_two_three_handler(message):
             break
         if bool(settingsAio.mass):
             for mas in settingsAio.mass:
-                if mas[1] == ctx_storage.get(f"{message.peer_id}_nfc") and mas[2] == my_position:
+                if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
         if check:
@@ -284,7 +297,7 @@ async def open_diplom_handler(message):
         if bool(settingsAio.mass):
             for mas in settingsAio.mass:
                 print(my_position, ctx_storage.get(f"{message.peer_id}_nfc"), mas)
-                if mas[1] == ctx_storage.get(f"{message.peer_id}_nfc") and mas[2] == my_position:
+                if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
         if check:
@@ -355,7 +368,10 @@ async def part_two_four_handler(message):
             break
         if bool(settingsAio.mass):
             for mas in settingsAio.mass:
-                if mas[1] == ctx_storage.get(f"{message.peer_id}_nfc") and mas[2] == my_position:
+                print("MASSS", mas[1], mas[2])
+                print("MASSS CHECK: ", mas[1] == message.text and mas[2] == my_position)
+                print("MASSS CHECK1: ", message.text, my_position)
+                if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
         if check:
@@ -466,7 +482,7 @@ async def part_two_five_handler(message):
             break
         if bool(settingsAio.mass):
             for mas in settingsAio.mass:
-                if mas[1] == ctx_storage.get(f"{message.peer_id}_nfc") and mas[2] == my_position:
+                if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
         if check:
@@ -483,7 +499,7 @@ async def part_two_five_handler(message):
         await asyncio.sleep(5)
         await message.answer(
             "Ну вот ты и узнал какой разряд получил твой персонаж! Пожелаю ему удачи в дальнейшем карьерном росте🤩")
-        await asyncio.sleep(3)
+        await asyncio.sleep(5)
         # await asyncio.sleep(3)
 
         await message.answer('''Ребята, нам сейчас нужно будет рассказать за круглым столом свой увлекательный рассказ про своего персонажа
@@ -498,7 +514,7 @@ async def part_two_five_handler(message):
 
 
 У вас есть немного времени, чтобы подготовиться"''')
-        await asyncio.sleep(5)
+        await asyncio.sleep(10)
 
         await message.answer("""Что же должен содержать ваш рассказ?
 
@@ -543,7 +559,7 @@ async def part_two_six_handler(message):
             break
         if bool(settingsAio.mass):
             for mas in settingsAio.mass:
-                if mas[1] == ctx_storage.get(f"{message.peer_id}_nfc") and mas[2] == my_position:
+                if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
         if check:
@@ -956,27 +972,35 @@ async def part_two_eight_pass_handler(message):
         title='Листовка_Базовая_кафедра_ОмГТУ_2024_2025_2.pdf'
     )
     await message.answer("Спасибо за ответы и участие в игре «Производство будущего» 🤗", attachment=photo_1)
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
     await message.answer("А теперь самая полезная информация, которую мы дарим тебе по результатам прохождения игры")
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
     await message.answer('Наше общение не прекращаетя! Если ты в этом году окончил школу, то у тебя есть возможность стать другом "Газпромнеть-ОНПЗ"')
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
     await message.answer('Это можно сделать, поступив на базовую кафедру "Газпром нефть" в ОмГТУ')
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
     await message.answer("И ты еще успеваешь это сделать, даже если уже подал документы в вуз!")
-    await asyncio.sleep(2)
+    await asyncio.sleep(3)
+    whatsapp_number = "79136320877"
+    text = 'Здравствуйте, Анна Анатольевна, я участник игры "Производство будущего", хочу подать заявку на базовую кафедру!'
+    encoded_text = quote(text)
+    url = f"https://wa.me/{whatsapp_number}?text={encoded_text}"
+
+    keyboard = Keyboard(inline=True)
+    keyboard.add(OpenLink(label="Написать в WhatsApp", link=url), color=KeyboardButtonColor.POSITIVE)
+
     await message.answer('''Для этого нужно сделать три действия:
 
 1. Написать в ТГ или WhatsApp куратору базовой кафедры Анне Анатольевне по номеру 89136320877
 2. Заполнить заявку, которую Анна Анатольевна тебе направит
 3. Пройти проверку и стать студентом базовой кафедры "Газпром нефти" в ОмГТУ
-''')
-    await asyncio.sleep(2)
+''', keyboard=keyboard)
+    await asyncio.sleep(5)
     await message.answer('''Сделать это можно только до 18 июля! Но лучше сегодня, пока еще есть такая возможность''')
-    await asyncio.sleep(2)
+    await asyncio.sleep(5)
     await message.answer('''А пока лови листовку, в которой про это подробнее написано ''', attachment=document_pdf)
-    await asyncio.sleep(2)
-    await message.answer('''Ну все, теперь ты знаешь все, что нужно! До встречи!''')
+    await asyncio.sleep(5)
+    await message.answer('''Ну все, теперь ты знаешь все, что нужно!😄☺️ До встречи!😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎''')
 
     await bot.state_dispenser.delete(message.peer_id)
 
