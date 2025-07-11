@@ -262,7 +262,7 @@ async def excel(message):
         # df_test_one.to_excel(writer,  sheet_name="Отраслевая Мотивация 1")
         # df_test_two.to_excel(writer,  sheet_name="Отраслевая Мотивация 2")
         print(df_test_one)
-        writer.save()
+        # writer.save()
         print(writer)
         print(excel_uploader)
         excel_test = await excel_uploader.upload(
