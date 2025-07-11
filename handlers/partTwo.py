@@ -18,6 +18,15 @@ from states.mystates import PartTwoStates, TestTwoStates, PartThreeStates
 ctx_storage = CtxStorage()
 db = Database('database.db')
 
+@labeler.message(command="check")
+async def check2(message):
+    print(db.get_user_id(message.peer_id))
+    user_id = db.get_user_id(message.peer_id)[0][0]
+    if bool(user_id):
+        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
+
+    await bot.state_dispenser.set(message.peer_id, PartTwoStates.PASSWORD_START_TWO_STATES)
+    return f'Для продолжения введите пароль: "Завод". Команда: {db.get_user_team(user_id)}'
 
 @labeler.message(state=PartTwoStates.PASSWORD_START_TWO_STATES)
 async def part_two_one_handler(message):
@@ -80,26 +89,15 @@ async def part_three_three_handler(message):
         await message.answer("Ой, ошибка. 🤔 Попробуй еще раз 😊")
 
 
-@labeler.message(command="check2")
+@labeler.message(command="check1")
 async def check2(message):
     print(db.get_user_id(message.peer_id))
     user_id = db.get_user_id(message.peer_id)[0][0]
     if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10) + 5)
+        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
 
     await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_ID)
-    return f"Продолжайте {ctx_storage.get(f'{message.peer_id}_team')}"
-
-@labeler.message(command="check3")
-async def check2(message):
-    print(db.get_user_id(message.peer_id))
-    user_id = db.get_user_id(message.peer_id)[0][0]
-    if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10))
-
-    await bot.state_dispenser.set(message.peer_id, PartTwoStates.UPDATEFEEDBACK)
-    return f"Продолжайте {ctx_storage.get(f'{message.peer_id}_team')}"
-
+    return f"Продолжайте {ctx_storage.get(f'{message.peer_id}_team')}. Для продолжения введите номер на человечке"
 
 @labeler.message(text=["установка", "Установка"], state=PartTwoStates.NFC_ID)
 async def part_two_two_pass_handler(message):
@@ -125,6 +123,7 @@ async def part_two_two_handler(message):
         await message.answer('''Приложи своего персонажа к считывателю куар кодов на участке "Школа, Дом творчества"
 Жди сообщений от меня''')
         check = False
+        prevValue = None
         my_position = team_way[id_team].split('-')[0]
         print("MY POSITION DATA:", my_position)
         while not check:
@@ -139,6 +138,9 @@ async def part_two_two_handler(message):
                     if str(mas[1]) == message.text and str(mas[2]) == my_position:
                         check = True
                         break
+                    elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
+                        prevValue = str(mas[2])
+                        await message.answer("Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
             if check:
                 break
 
@@ -152,15 +154,6 @@ async def part_two_two_handler(message):
             return second_part_one[id_team]
     else:
         await message.answer("Вы ввели неправильный код")
-
-
-@labeler.message(command="check1")
-async def check1(message):
-    user_id = db.get_user_id(message.peer_id)[0][0]
-    if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10))
-    await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_GET_ONE)
-    return "Продолжайте"
 
 
 @labeler.message(text=["реактор", "Реактор"], state=PartTwoStates.NFC_GET_ONE)
@@ -209,6 +202,7 @@ async def part_two_three_handler(message):
         ' \n\nПодойди к участку "Университет, Колледж" и приложи своего человечка к специальному блоку')
 
     check = False
+    prevValue = team_way[id_team].split('-')[0]
     my_position = team_way[id_team].split('-')[1]
     while not check:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
@@ -219,6 +213,10 @@ async def part_two_three_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
+                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
+                    prevValue = str(mas[2])
+                    await message.answer(
+                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
             break
 
@@ -288,18 +286,24 @@ async def open_diplom_handler(message):
     await message.answer('Поднеси своей человечка с куар кодом к считывателю на участке "Офис компании" и скорее давай узнай куда твой персонаж пойдёт работать')
 
     check = False
+    prevValue = team_way[id_team].split('-')[1]
     my_position = team_way[id_team].split('-')[2]
 
     while not check:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
         if ctx_storage.get(f"{message.peer_id}_position_check") == 1:
             break
+
         if bool(settingsAio.mass):
             for mas in settingsAio.mass:
                 print(my_position, ctx_storage.get(f"{message.peer_id}_nfc"), mas)
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
+                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
+                    prevValue = str(mas[2])
+                    await message.answer(
+                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
             break
 
@@ -361,6 +365,7 @@ async def part_two_four_handler(message):
     await message.answer(second_part_three[id_team])
 
     check = False
+    prevValue = team_way[id_team].split('-')[2]
     my_position = team_way[id_team].split('-')[3]
     while not check:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
@@ -374,6 +379,10 @@ async def part_two_four_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
+                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
+                    prevValue = str(mas[2])
+                    await message.answer(
+                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
             break
 
@@ -411,6 +420,22 @@ async def part_two_four_handler(message):
                 ).get_json()
             )
         return keyboard
+
+@labeler.message(command="check2")
+async def check1(message):
+    print(db.get_user_id(message.peer_id))
+    user_id = db.get_user_id(message.peer_id)[0][0]
+    keyboard = await message.answer(
+        '''Твой персонаж умело продемонстрироовал свои знания старшим коллегам и было принято решение по результатам повысить тебе разряд. Готов?😏''',
+        keyboard=(
+            Keyboard(inline=True)
+            .add(Text("Конечно 😃"), color=KeyboardButtonColor.POSITIVE)
+        ).get_json()
+    )
+    if bool(user_id):
+        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
+    await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_GET_THREE)
+    return keyboard
 
 
 @labeler.message(text=["Разряд", "разряд"], state=PartTwoStates.NFC_GET_THREE)
@@ -476,6 +501,8 @@ async def part_two_five_handler(message):
     await message.answer('''Для повышения разряда приложи своего персонажа к куар код считывателю и скорееее узнай какой он разряд все-таки получил🤩''')
     check = False
     my_position = team_way[id_team].split('-')[4]
+    prevValue = team_way[id_team].split('-')[3]
+
     while not check or ctx_storage.get(f"{message.peer_id}_position_check") == 0:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
         if ctx_storage.get(f"{message.peer_id}_position_check") == 1:
@@ -485,6 +512,10 @@ async def part_two_five_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
+                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
+                    prevValue = str(mas[2])
+                    await message.answer(
+                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
             break
 
@@ -553,6 +584,8 @@ async def part_two_six_handler(message):
     await message.answer(second_part_seven[id_team])
     check = False
     my_position = team_way[id_team].split('-')[4]
+    prevValue = team_way[id_team].split('-')[3]
+
     while not check or ctx_storage.get(f"{message.peer_id}_position_check") == 0:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
         if ctx_storage.get(f"{message.peer_id}_position_check") == 1:
@@ -562,6 +595,10 @@ async def part_two_six_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
+                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
+                    prevValue = str(mas[2])
+                    await message.answer(
+                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
             break
 
@@ -588,15 +625,14 @@ async def part_two_six_handler(message):
         await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS)
         return "Для перехода на следующий этап введи пароль"
 
-
-@labeler.message(text="check1")
-async def check(message):
+@labeler.message(command="check3")
+async def check1(message):
+    print(db.get_user_id(message.peer_id))
     user_id = db.get_user_id(message.peer_id)[0][0]
     if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10))
-    await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_GET_FOUR)
-    return "Продолжайте"
-
+        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
+    await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS)
+    return 'Напишите пароль "Вызов" для продолжения'
 
 @labeler.message(text=["Печь", "печь"], state=PartTwoStates.NFC_GET_FOUR)
 async def part_two_six_pass_handler(message):
@@ -708,6 +744,14 @@ async def part_three_one(message):
     else:
         await message.answer("Ой, ошибка. 🤔 Попробуй еще раз 😊")
 
+@labeler.message(command="check4")
+async def check1(message):
+    print(db.get_user_id(message.peer_id))
+    user_id = db.get_user_id(message.peer_id)[0][0]
+    if bool(user_id):
+        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
+    await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS_ONE)
+    return 'Напишите пароль "Анкета" для продолжения'
 
 @labeler.message(state=PartThreeStates.PASS_ONE)
 async def part_three_two(message):
@@ -920,13 +964,14 @@ async def answer_seven_handler(message):
 
 # ------------------------------------------------------------------------------------------------
 
-@labeler.message(command="check")
-async def check(message):
+@labeler.message(command="check4")
+async def check1(message):
+    print(db.get_user_id(message.peer_id))
     user_id = db.get_user_id(message.peer_id)[0][0]
     if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10))
+        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
     await bot.state_dispenser.set(message.peer_id, PartTwoStates.FEEDBACK)
-    return "Продолжайте"
+    return 'Напиши нам отзыв о том, как прошла эта игра с нами! 😊 '
 
 
 @labeler.message(state=PartTwoStates.FEEDBACK)
@@ -966,11 +1011,7 @@ async def part_two_eight_pass_handler(message):
         file_source=f"img/endgame.jpg",
         peer_id=message.peer_id,
     )
-    document_pdf = await excel_uploader.upload(
-        file_source=f"img/Листовка_Базовая_кафедра_ОмГТУ_2024_2025_2.pdf",
-        peer_id=message.peer_id,
-        title='Листовка_Базовая_кафедра_ОмГТУ_2024_2025_2.pdf'
-    )
+
     await message.answer("Спасибо за ответы и участие в игре «Производство будущего» 🤗", attachment=photo_1)
     await asyncio.sleep(3)
     await message.answer("А теперь самая полезная информация, которую мы дарим тебе по результатам прохождения игры")
@@ -998,6 +1039,11 @@ async def part_two_eight_pass_handler(message):
     await asyncio.sleep(5)
     await message.answer('''Сделать это можно только до 18 июля! Но лучше сегодня, пока еще есть такая возможность''')
     await asyncio.sleep(5)
+    document_pdf = await excel_uploader.upload(
+        file_source=f"img/Листовка_Базовая_кафедра_ОмГТУ_2024_2025_2.pdf",
+        peer_id=message.peer_id,
+        title='Листовка_Базовая_кафедра_ОмГТУ_2024_2025_2.pdf'
+    )
     await message.answer('''А пока лови листовку, в которой про это подробнее написано ''', attachment=document_pdf)
     await asyncio.sleep(5)
     await message.answer('''Ну все, теперь ты знаешь все, что нужно!😄☺️ До встречи!😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎😎''')

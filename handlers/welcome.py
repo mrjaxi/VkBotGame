@@ -28,10 +28,10 @@ async def test_user(message):
     # user_id = db.get_user_id(message.peer_id)[0][0]
     user_id = db.get_user_id(message.peer_id)[0][0]
     if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10))
+        ctx_storage.set(f"{message.peer_id}_team", 3)
     # ctx_storage.set(f"{message.peer_id}_team", 8)
     ctx_storage.set(f"{message.peer_id}_number", 0)
-    await bot.state_dispenser.set(message.peer_id, PartOneStates.START_STATE)
+    await bot.state_dispenser.set(message.peer_id, PartOneStates.ANSWER_FIVE_STATES)
     await message.answer("Для продолжения введите пароль")
 
 

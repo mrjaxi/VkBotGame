@@ -173,6 +173,14 @@ class Database:
                 (user_id,)).fetchall()
             return result
 
+    # вывод user_id юзера
+    def get_user_team(self, user_id):
+        with self.connection:
+            result = self.cursor.execute(
+                "SELECT `team` FROM `user` WHERE  `user_id` = ?",
+                (user_id,)).fetchall()
+            return result
+
     def del_user(self, user_id):
         with self.connection:
             return self.cursor.execute("DELETE FROM `user` WHERE user_id = ?", (user_id,))
