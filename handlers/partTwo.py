@@ -85,7 +85,7 @@ async def check2(message):
     print(db.get_user_id(message.peer_id))
     user_id = db.get_user_id(message.peer_id)[0][0]
     if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", 8)
+        ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10) + 5)
 
     await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_ID)
     return f"Продолжайте {ctx_storage.get(f'{message.peer_id}_team')}"
@@ -95,7 +95,7 @@ async def check2(message):
     print(db.get_user_id(message.peer_id))
     user_id = db.get_user_id(message.peer_id)[0][0]
     if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", 8)
+        ctx_storage.set(f"{message.peer_id}_team", (int(user_id) % 10))
 
     await bot.state_dispenser.set(message.peer_id, PartTwoStates.UPDATEFEEDBACK)
     return f"Продолжайте {ctx_storage.get(f'{message.peer_id}_team')}"
@@ -920,7 +920,7 @@ async def answer_seven_handler(message):
 
 # ------------------------------------------------------------------------------------------------
 
-@labeler.message(text="check")
+@labeler.message(command="check")
 async def check(message):
     user_id = db.get_user_id(message.peer_id)[0][0]
     if bool(user_id):

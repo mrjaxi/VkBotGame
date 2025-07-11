@@ -254,10 +254,13 @@ async def excel(message):
                                     "Баллы6": test_end_ans_six_ball,
                                     })
         print(users_all_test)
-        writer = pd.ExcelWriter('./database_exel_test.xlsx', engine='xlsxwriter')
-        print(writer)
-        df_test_one.to_excel(writer,  sheet_name="Отраслевая Мотивация 1")
-        df_test_two.to_excel(writer,  sheet_name="Отраслевая Мотивация 2")
+        # writer = pd.ExcelWriter('./database_exel_test.xlsx', engine='xlsxwriter')
+        # print(writer)
+        with pd.ExcelWriter("database_exel_test.xlsx", engine="xlsxwriter") as writer:
+            df_test_one.to_excel(writer,  sheet_name="Отраслевая Мотивация 1")
+            df_test_two.to_excel(writer,  sheet_name="Отраслевая Мотивация 2")
+        # df_test_one.to_excel(writer,  sheet_name="Отраслевая Мотивация 1")
+        # df_test_two.to_excel(writer,  sheet_name="Отраслевая Мотивация 2")
         print(df_test_one)
         writer.save()
         print(writer)
@@ -269,7 +272,9 @@ async def excel(message):
         )
         await message.answer(attachment=excel_test)
 
-        df.to_excel('./database_exel.xlsx', index=False, sheet_name="Участники")
+        with pd.ExcelWriter("database_exel_test.xlsx", engine="xlsxwriter") as writer:
+            df.to_excel(writer,  sheet_name="Участники")
+        # df.to_excel('./database_exel.xlsx', index=False, sheet_name="Участники")
         print(users_all)
         excel = await excel_uploader.upload(
             file_source='database_exel.xlsx',
