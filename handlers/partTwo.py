@@ -160,7 +160,6 @@ async def part_two_two_handler(message):
         await message.answer('''Приложи своего персонажа к считывателю куар кодов на участке "Школа, Дом творчества"
 Жди сообщений от меня''')
         check = False
-        prevValue = None
         my_position = team_way[id_team].split('-')[0]
         print("WAY", team_way[id_team])
         print("MY POSITION DATA:", my_position)
@@ -176,9 +175,6 @@ async def part_two_two_handler(message):
                     if str(mas[1]) == message.text and str(mas[2]) == my_position:
                         check = True
                         break
-                    elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                        prevValue = str(mas[2])
-                        await message.answer("Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
             if check:
                 break
 
@@ -240,7 +236,6 @@ async def part_two_three_handler(message):
         ' \n\nПодойди к участку "Университет, Колледж" и приложи своего человечка к специальному блоку')
 
     check = False
-    prevValue = team_way[id_team].split('-')[0]
     my_position = team_way[id_team].split('-')[1]
     while not check:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
@@ -251,10 +246,6 @@ async def part_two_three_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
-                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                    prevValue = str(mas[2])
-                    await message.answer(
-                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
             break
 
@@ -324,7 +315,6 @@ async def open_diplom_handler(message):
     await message.answer('Поднеси своей человечка с куар кодом к считывателю на участке "Офис компании" и скорее давай узнай куда твой персонаж пойдёт работать')
 
     check = False
-    prevValue = team_way[id_team].split('-')[1]
     my_position = team_way[id_team].split('-')[2]
 
     while not check:
@@ -338,10 +328,6 @@ async def open_diplom_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
-                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                    prevValue = str(mas[2])
-                    await message.answer(
-                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
             break
 
@@ -403,7 +389,6 @@ async def part_two_four_handler(message):
     await message.answer(second_part_three[id_team])
 
     check = False
-    prevValue = team_way[id_team].split('-')[2]
     my_position = team_way[id_team].split('-')[3]
     while not check:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
@@ -417,10 +402,6 @@ async def part_two_four_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
-                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                    prevValue = str(mas[2])
-                    await message.answer(
-                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
             break
 
@@ -522,7 +503,6 @@ async def part_two_five_handler(message):
     id_team = ctx_storage.get(f"{message.peer_id}_team")
     await message.answer('''Для повышения разряда приложи своего персонажа к куар код считывателю и скорееее узнай какой он разряд все-таки получил🤩''')
     check = False
-    prevValue = team_way[id_team].split('-')[3]
     my_position = team_way[id_team].split('-')[4]
 
     while not check or ctx_storage.get(f"{message.peer_id}_position_check") == 0:
@@ -534,10 +514,6 @@ async def part_two_five_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
-                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                    prevValue = str(mas[2])
-                    await message.answer(
-                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
             break
 
@@ -606,7 +582,6 @@ async def part_two_six_handler(message):
     await message.answer(second_part_seven[id_team])
     check = False
     my_position = team_way[id_team].split('-')[4]
-    prevValue = team_way[id_team].split('-')[3]
 
     while not check or ctx_storage.get(f"{message.peer_id}_position_check") == 0:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
@@ -617,10 +592,6 @@ async def part_two_six_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
-                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                    prevValue = str(mas[2])
-                    await message.answer(
-                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
             break
 
