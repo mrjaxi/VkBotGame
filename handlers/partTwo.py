@@ -20,13 +20,59 @@ db = Database('database.db')
 
 @labeler.message(command="check")
 async def check2(message):
-    print(db.get_user_id(message.peer_id))
     user_id = db.get_user_id(message.peer_id)[0][0]
+    user_team = db.get_user_team(message.peer_id)[0][0]
     if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
+        ctx_storage.set(f"{message.peer_id}_team", user_team)
 
     await bot.state_dispenser.set(message.peer_id, PartTwoStates.PASSWORD_START_TWO_STATES)
-    return f'Для продолжения введите пароль: "Завод". Команда: {db.get_user_team(user_id)}'
+    return f'Для продолжения введите пароль: "Завод". Команда: {user_team}'
+
+@labeler.message(command="check1")
+async def check2(message):
+    user_id = db.get_user_id(message.peer_id)[0][0]
+    user_team = db.get_user_team(message.peer_id)[0][0]
+    print(user_team)
+    if bool(user_id):
+        ctx_storage.set(f"{message.peer_id}_team", user_team)
+    await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_ID)
+    return f"Продолжайте {user_team}. Для продолжения введите номер на человечке"
+
+@labeler.message(command="check2")
+async def check1(message):
+    user_id = db.get_user_id(message.peer_id)[0][0]
+    user_team = db.get_user_team(message.peer_id)[0][0]
+    keyboard = await message.answer(
+        '''Твой персонаж умело продемонстрироовал свои знания старшим коллегам и было принято решение по результатам повысить тебе разряд. Готов?😏''',
+        keyboard=(
+            Keyboard(inline=True)
+            .add(Text("Конечно 😃"), color=KeyboardButtonColor.POSITIVE)
+        ).get_json()
+    )
+    if bool(user_id):
+        ctx_storage.set(f"{message.peer_id}_team", user_team)
+    await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_GET_THREE)
+    return keyboard
+
+
+@labeler.message(command="check4")
+async def check1(message):
+    user_id = db.get_user_id(message.peer_id)[0][0]
+    user_team = db.get_user_team(message.peer_id)[0][0]
+    if bool(user_id):
+        ctx_storage.set(f"{message.peer_id}_team", user_team)
+    await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS_ONE)
+    return 'Напишите пароль "Анкета" для продолжения'
+
+@labeler.message(command="check5")
+async def check1(message):
+    user_id = db.get_user_id(message.peer_id)[0][0]
+    user_team = db.get_user_team(message.peer_id)[0][0]
+    if bool(user_id):
+        ctx_storage.set(f"{message.peer_id}_team", user_team)
+    await bot.state_dispenser.set(message.peer_id, PartTwoStates.FEEDBACK)
+    return 'Напиши нам отзыв о том, как прошла эта игра с нами! 😊 '
+
 
 @labeler.message(state=PartTwoStates.PASSWORD_START_TWO_STATES)
 async def part_two_one_handler(message):
@@ -89,16 +135,6 @@ async def part_three_three_handler(message):
         await message.answer("Ой, ошибка. 🤔 Попробуй еще раз 😊")
 
 
-@labeler.message(command="check1")
-async def check2(message):
-    print(db.get_user_id(message.peer_id))
-    user_id = db.get_user_id(message.peer_id)[0][0]
-    if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
-
-    await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_ID)
-    return f"Продолжайте {ctx_storage.get(f'{message.peer_id}_team')}. Для продолжения введите номер на человечке"
-
 @labeler.message(text=["установка", "Установка"], state=PartTwoStates.NFC_ID)
 async def part_two_two_pass_handler(message):
     id_team = ctx_storage.get(f"{message.peer_id}_team")
@@ -113,6 +149,7 @@ async def part_two_two_pass_handler(message):
 async def part_two_two_handler(message):
     if db.nfc_exists(message.text):
         id_team = ctx_storage.get(f"{message.peer_id}_team")
+        print(id_team)
         ctx_storage.set(f"{message.peer_id}_position_check", 0)
         ctx_storage.set(f"{message.peer_id}_nfc", message.text)
         db.set_nfc(message.peer_id, message.text)
@@ -125,6 +162,7 @@ async def part_two_two_handler(message):
         check = False
         prevValue = None
         my_position = team_way[id_team].split('-')[0]
+        print("WAY", team_way[id_team])
         print("MY POSITION DATA:", my_position)
         while not check:
             if ctx_storage.get(f"{message.peer_id}_position_check") == 1:
@@ -421,22 +459,6 @@ async def part_two_four_handler(message):
             )
         return keyboard
 
-@labeler.message(command="check2")
-async def check1(message):
-    print(db.get_user_id(message.peer_id))
-    user_id = db.get_user_id(message.peer_id)[0][0]
-    keyboard = await message.answer(
-        '''Твой персонаж умело продемонстрироовал свои знания старшим коллегам и было принято решение по результатам повысить тебе разряд. Готов?😏''',
-        keyboard=(
-            Keyboard(inline=True)
-            .add(Text("Конечно 😃"), color=KeyboardButtonColor.POSITIVE)
-        ).get_json()
-    )
-    if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
-    await bot.state_dispenser.set(message.peer_id, PartTwoStates.NFC_GET_THREE)
-    return keyboard
-
 
 @labeler.message(text=["Разряд", "разряд"], state=PartTwoStates.NFC_GET_THREE)
 async def part_two_five_pass_handler(message):
@@ -500,8 +522,8 @@ async def part_two_five_handler(message):
     id_team = ctx_storage.get(f"{message.peer_id}_team")
     await message.answer('''Для повышения разряда приложи своего персонажа к куар код считывателю и скорееее узнай какой он разряд все-таки получил🤩''')
     check = False
-    my_position = team_way[id_team].split('-')[4]
     prevValue = team_way[id_team].split('-')[3]
+    my_position = team_way[id_team].split('-')[4]
 
     while not check or ctx_storage.get(f"{message.peer_id}_position_check") == 0:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
@@ -627,10 +649,10 @@ async def part_two_six_handler(message):
 
 @labeler.message(command="check3")
 async def check1(message):
-    print(db.get_user_id(message.peer_id))
     user_id = db.get_user_id(message.peer_id)[0][0]
+    user_team = db.get_user_team(message.peer_id)[0][0]
     if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
+        ctx_storage.set(f"{message.peer_id}_team", user_team)
     await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS)
     return 'Напишите пароль "Вызов" для продолжения'
 
@@ -743,15 +765,6 @@ async def part_three_one(message):
         return "Когда все команды выступят ,тебе нужно будет ввести пароль, который ты узнаешь от организатора"
     else:
         await message.answer("Ой, ошибка. 🤔 Попробуй еще раз 😊")
-
-@labeler.message(command="check4")
-async def check1(message):
-    print(db.get_user_id(message.peer_id))
-    user_id = db.get_user_id(message.peer_id)[0][0]
-    if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
-    await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS_ONE)
-    return 'Напишите пароль "Анкета" для продолжения'
 
 @labeler.message(state=PartThreeStates.PASS_ONE)
 async def part_three_two(message):
@@ -963,16 +976,6 @@ async def answer_seven_handler(message):
 
 
 # ------------------------------------------------------------------------------------------------
-
-@labeler.message(command="check4")
-async def check1(message):
-    print(db.get_user_id(message.peer_id))
-    user_id = db.get_user_id(message.peer_id)[0][0]
-    if bool(user_id):
-        ctx_storage.set(f"{message.peer_id}_team", db.get_user_team(user_id))
-    await bot.state_dispenser.set(message.peer_id, PartTwoStates.FEEDBACK)
-    return 'Напиши нам отзыв о том, как прошла эта игра с нами! 😊 '
-
 
 @labeler.message(state=PartTwoStates.FEEDBACK)
 async def part_two_six_pass_handler(message):
