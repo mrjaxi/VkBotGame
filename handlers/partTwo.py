@@ -152,6 +152,7 @@ async def part_two_two_handler(message):
         print(id_team)
         ctx_storage.set(f"{message.peer_id}_position_check", 0)
         ctx_storage.set(f"{message.peer_id}_nfc", message.text)
+        ctx_storage.set(f"{message.peer_id}_position_prev_data", -1)
         db.set_nfc(message.peer_id, message.text)
         await message.answer('Давай отправимся в те времена, когда твой персонаж учился в школе ')
 
@@ -160,24 +161,23 @@ async def part_two_two_handler(message):
         await message.answer('''Приложи своего персонажа к считывателю куар кодов на участке "Школа, Дом творчества"
 Жди сообщений от меня''')
         check = False
-        prevValue = None
         my_position = team_way[id_team].split('-')[0]
         print("WAY", team_way[id_team])
         print("MY POSITION DATA:", my_position)
         while not check:
             if ctx_storage.get(f"{message.peer_id}_position_check") == 1:
                 break
-            print("settingsAioMass: ", bool(settingsAio.mass), settingsAio.mass)
+            print("SETTINGS AIO:", settingsAio.mass)
             if bool(settingsAio.mass):
                 for mas in settingsAio.mass:
-                    print("MASSS", mas[1], mas[2])
-                    print("MASSS CHECK: ", mas[1] == message.text and mas[2] == my_position)
-                    print("MASSS CHECK1: ", message.text, my_position)
+                    print("MASSS PART:", mas[1], mas[2])
+                    print("MASSS CHECK:", mas[1] == message.text and mas[2] == my_position)
+                    print("MASSS CHECK MESSAGE AND POSITION:", message.text, my_position)
                     if str(mas[1]) == message.text and str(mas[2]) == my_position:
                         check = True
                         break
-                    elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                        prevValue = str(mas[2])
+                    elif str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and ctx_storage.get(f"{message.peer_id}_position_prev_data") != str(mas[2]) and str(mas[2]) != my_position:
+                        ctx_storage.set(f"{message.peer_id}_position_prev_data", str(mas[2]))
                         await message.answer("Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
             if check:
                 break
@@ -229,6 +229,8 @@ async def part_two_three_handler(message):
     ctx_storage.set(f"{message.peer_id}_position_check", 0)
     id_team = ctx_storage.get(f"{message.peer_id}_team")
     db.set_subject(message.peer_id, message.text)
+    ctx_storage.set(f"{message.peer_id}_position_prev_data", team_way[id_team].split('-')[0])
+
     await asyncio.sleep(1)
     await message.answer(
         "В школьные годы у твоего персонажа часто появлялся вопрос, кем он станет, когда вырастет? Он думал, в какое учебное заведение ему пойти учиться"
@@ -240,7 +242,6 @@ async def part_two_three_handler(message):
         ' \n\nПодойди к участку "Университет, Колледж" и приложи своего человечка к специальному блоку')
 
     check = False
-    prevValue = team_way[id_team].split('-')[0]
     my_position = team_way[id_team].split('-')[1]
     while not check:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
@@ -251,8 +252,8 @@ async def part_two_three_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
-                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                    prevValue = str(mas[2])
+                elif str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and ctx_storage.get(f"{message.peer_id}_position_prev_data") != str(mas[2]) and str(mas[2]) != my_position:
+                    ctx_storage.set(f"{message.peer_id}_position_prev_data", str(mas[2]))
                     await message.answer(
                         "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
@@ -320,11 +321,11 @@ async def open_diplom_pass_handler(message):
 async def open_diplom_handler(message):
     id_team = ctx_storage.get(f"{message.peer_id}_team")
     ctx_storage.set(f"{message.peer_id}_position_check", 0)
+    ctx_storage.set(f"{message.peer_id}_position_prev_data", team_way[id_team].split('-')[1])
 
     await message.answer('Поднеси своей человечка с куар кодом к считывателю на участке "Офис компании" и скорее давай узнай куда твой персонаж пойдёт работать')
 
     check = False
-    prevValue = team_way[id_team].split('-')[1]
     my_position = team_way[id_team].split('-')[2]
 
     while not check:
@@ -338,8 +339,8 @@ async def open_diplom_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
-                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                    prevValue = str(mas[2])
+                elif str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and ctx_storage.get(f"{message.peer_id}_position_prev_data") != str(mas[2]) and str(mas[2]) != my_position:
+                    ctx_storage.set(f"{message.peer_id}_position_prev_data", str(mas[2]))
                     await message.answer(
                         "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
@@ -399,11 +400,11 @@ async def part_two_four_pass_handler(message):
 async def part_two_four_handler(message):
     ctx_storage.set(f"{message.peer_id}_position_check", 0)
     id_team = ctx_storage.get(f"{message.peer_id}_team")
+    ctx_storage.set(f"{message.peer_id}_position_prev_data", team_way[id_team].split('-')[2])
 
     await message.answer(second_part_three[id_team])
 
     check = False
-    prevValue = team_way[id_team].split('-')[2]
     my_position = team_way[id_team].split('-')[3]
     while not check:
         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
@@ -417,8 +418,8 @@ async def part_two_four_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
-                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                    prevValue = str(mas[2])
+                elif str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and  ctx_storage.get(f"{message.peer_id}_position_prev_data") != str(mas[2]) and str(mas[2]) != my_position:
+                    ctx_storage.set(f"{message.peer_id}_position_prev_data", str(mas[2]))
                     await message.answer(
                         "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
@@ -520,9 +521,10 @@ async def part_two_five_pass_handler(message):
 async def part_two_five_handler(message):
     ctx_storage.set(f"{message.peer_id}_position_check", 0)
     id_team = ctx_storage.get(f"{message.peer_id}_team")
+    ctx_storage.set(f"{message.peer_id}_position_prev_data", team_way[id_team].split('-')[3])
+
     await message.answer('''Для повышения разряда приложи своего персонажа к куар код считывателю и скорееее узнай какой он разряд все-таки получил🤩''')
     check = False
-    prevValue = team_way[id_team].split('-')[3]
     my_position = team_way[id_team].split('-')[4]
 
     while not check or ctx_storage.get(f"{message.peer_id}_position_check") == 0:
@@ -534,8 +536,8 @@ async def part_two_five_handler(message):
                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
                     check = True
                     break
-                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                    prevValue = str(mas[2])
+                elif str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and ctx_storage.get(f"{message.peer_id}_position_prev_data") != str(mas[2]) and str(mas[2]) != my_position:
+                    ctx_storage.set(f"{message.peer_id}_position_prev_data", str(mas[2]))
                     await message.answer(
                         "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
         if check:
@@ -599,53 +601,54 @@ async def part_two_five_handler(message):
         return "Когда все команды выступят, тебе нужно будет ввести пароль, который ты узнаешь от организатора"
 
 
-@labeler.message(text=["Поехали"], state=PartTwoStates.NFC_GET_FOUR)
-async def part_two_six_handler(message):
-    ctx_storage.set(f"{message.peer_id}_position_check", 0)
-    id_team = ctx_storage.get(f"{message.peer_id}_team")
-    await message.answer(second_part_seven[id_team])
-    check = False
-    my_position = team_way[id_team].split('-')[4]
-    prevValue = team_way[id_team].split('-')[3]
-
-    while not check or ctx_storage.get(f"{message.peer_id}_position_check") == 0:
-        # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
-        if ctx_storage.get(f"{message.peer_id}_position_check") == 1:
-            break
-        if bool(settingsAio.mass):
-            for mas in settingsAio.mass:
-                if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
-                    check = True
-                    break
-                elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
-                    prevValue = str(mas[2])
-                    await message.answer(
-                        "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
-        if check:
-            break
-
-        if not settingsAio.aiocheck:
-            break
-        await asyncio.sleep(2)
-
-    if check:
-        await message.answer(second_part_eight[id_team])
-
-        await asyncio.sleep(5)
-        await message.answer(second_part_nine[id_team])
-
-        await asyncio.sleep(50)
-        # await asyncio.sleep(5)
-        await message.answer("Так, а куда же ты отправишься дальше? Дай-ка подумать"
-                             "\n\nХотя нет, это было заключительное перемещение по НПЗ"
-                             "\n\nПолучается, что этот этап пройден! Ты молодец! 🎉😊")
-        await asyncio.sleep(2)
-        # ctx_storage.delete(f"{message.peer_id}_team")
-        # ctx_storage.delete(f"{message.peer_id}_number")
-        # ctx_storage.delete(f"{message.peer_id}_position_check")
-        # ctx_storage.delete(f"{message.peer_id}_nfc")
-        await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS)
-        return "Для перехода на следующий этап введи пароль"
+# @labeler.message(text=["Поехали"], state=PartTwoStates.NFC_GET_FOUR)
+# async def part_two_six_handler(message):
+#     ctx_storage.set(f"{message.peer_id}_position_check", 0)
+#     id_team = ctx_storage.get(f"{message.peer_id}_team")
+#     ctx_storage.set(f"{message.peer_id}_position_prev_data", team_way[id_team].split('-')[3])
+#
+#     await message.answer(second_part_seven[id_team])
+#     check = False
+#     my_position = team_way[id_team].split('-')[4]
+#
+#     while not check or ctx_storage.get(f"{message.peer_id}_position_check") == 0:
+#         # card = await user_info(ctx_storage.get(f"{message.peer_id}_nfc"))
+#         if ctx_storage.get(f"{message.peer_id}_position_check") == 1:
+#             break
+#         if bool(settingsAio.mass):
+#             for mas in settingsAio.mass:
+#                 if str(mas[1]) == ctx_storage.get(f"{message.peer_id}_nfc") and str(mas[2]) == my_position:
+#                     check = True
+#                     break
+#                 elif prevValue != str(mas[2]) and str(mas[2]) != my_position:
+#                     prevValue = str(mas[2])
+#                     await message.answer(
+#                         "Похоже ты приложил человечка не к тому считывателю😢\nПрочитай сообщения выше внимательно, и попробуй еще раз😊")
+#         if check:
+#             break
+#
+#         if not settingsAio.aiocheck:
+#             break
+#         await asyncio.sleep(2)
+#
+#     if check:
+#         await message.answer(second_part_eight[id_team])
+#
+#         await asyncio.sleep(5)
+#         await message.answer(second_part_nine[id_team])
+#
+#         await asyncio.sleep(50)
+#         # await asyncio.sleep(5)
+#         await message.answer("Так, а куда же ты отправишься дальше? Дай-ка подумать"
+#                              "\n\nХотя нет, это было заключительное перемещение по НПЗ"
+#                              "\n\nПолучается, что этот этап пройден! Ты молодец! 🎉😊")
+#         await asyncio.sleep(2)
+#         # ctx_storage.delete(f"{message.peer_id}_team")
+#         # ctx_storage.delete(f"{message.peer_id}_number")
+#         # ctx_storage.delete(f"{message.peer_id}_position_check")
+#         # ctx_storage.delete(f"{message.peer_id}_nfc")
+#         await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS)
+#         return "Для перехода на следующий этап введи пароль"
 
 @labeler.message(command="check3")
 async def check1(message):
@@ -656,28 +659,28 @@ async def check1(message):
     await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS)
     return 'Напишите пароль "Вызов" для продолжения'
 
-@labeler.message(text=["Печь", "печь"], state=PartTwoStates.NFC_GET_FOUR)
-async def part_two_six_pass_handler(message):
-    ctx_storage.set(f"{message.peer_id}_position_check", 1)
-    id_team = ctx_storage.get(f"{message.peer_id}_team")
-    db.set_status(message.peer_id)
-    await message.answer(second_part_eight[id_team])
-
-    await asyncio.sleep(5)
-    await message.answer(second_part_nine[id_team])
-
-    await asyncio.sleep(50)
-    # await asyncio.sleep(5)
-    await message.answer("Так, а куда же ты отправишься дальше? Дай-ка подумать\n\n"
-                         "Хотя нет, это было заключительное перемещение по НПЗ"
-                         "\n\nПолучается, что этот этап пройден! Ты молодец! 🎉😊")
-    # ctx_storage.delete(f"{message.peer_id}_team")
-    # ctx_storage.delete(f"{message.peer_id}_number")
-    # ctx_storage.delete(f"{message.peer_id}_position_check")
-    # ctx_storage.delete(f"{message.peer_id}_nfc")
-    await asyncio.sleep(2)
-    await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS)
-    return "Для перехода на следующий этап введи пароль"
+# @labeler.message(text=["Печь", "печь"], state=PartTwoStates.NFC_GET_FOUR)
+# async def part_two_six_pass_handler(message):
+#     ctx_storage.set(f"{message.peer_id}_position_check", 1)
+#     id_team = ctx_storage.get(f"{message.peer_id}_team")
+#     db.set_status(message.peer_id)
+#     await message.answer(second_part_eight[id_team])
+#
+#     await asyncio.sleep(5)
+#     await message.answer(second_part_nine[id_team])
+#
+#     await asyncio.sleep(50)
+#     # await asyncio.sleep(5)
+#     await message.answer("Так, а куда же ты отправишься дальше? Дай-ка подумать\n\n"
+#                          "Хотя нет, это было заключительное перемещение по НПЗ"
+#                          "\n\nПолучается, что этот этап пройден! Ты молодец! 🎉😊")
+#     # ctx_storage.delete(f"{message.peer_id}_team")
+#     # ctx_storage.delete(f"{message.peer_id}_number")
+#     # ctx_storage.delete(f"{message.peer_id}_position_check")
+#     # ctx_storage.delete(f"{message.peer_id}_nfc")
+#     await asyncio.sleep(2)
+#     await bot.state_dispenser.set(message.peer_id, PartThreeStates.PASS)
+#     return "Для перехода на следующий этап введи пароль"
 
 
 @labeler.message(state=PartThreeStates.PASS)
